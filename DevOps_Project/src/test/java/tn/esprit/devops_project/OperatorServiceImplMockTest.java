@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.devops_project.entities.Operator;
 import tn.esprit.devops_project.repositories.OperatorRepository;
-import tn.esprit.tpfoyer.service.OperatorServiceImpl;
+import tn.esprit.devops_project.OperatorServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
