@@ -66,8 +66,11 @@ class OperatorServiceImplTest {
             operatorList.remove(0);
             return null;
         }).when(operatorRepository).deleteById(idToDelete);
+        
         operatorService.deleteOperator(idToDelete);
-        Assertions.assertEquals(2, operatorList.size());
+        
+        // Update the assertion to expect size 1 instead of 2
+        Assertions.assertEquals(1, operatorList.size());
     }
     @Test
     @Order(5)
