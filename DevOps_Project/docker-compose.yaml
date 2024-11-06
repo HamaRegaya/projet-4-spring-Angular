@@ -17,7 +17,7 @@ services:
     # build: ./  # Uncomment if you are building the app locally
     restart: on-failure
     ports:
-      - 8082:8082  # Use a different host port if 8082 is occupied
+      - 8089:8089  # Use a different host port if 8089 is occupied
 
     environment:
       SPRING_APPLICATION_JSON: '{

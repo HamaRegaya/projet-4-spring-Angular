@@ -45,15 +45,15 @@
 
 <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a href="#info" 
+            <a href="#info"
                 class="nav-link"
                 class="nav-link active"
                 role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
         <li class="nav-item">
-            <a href="#source" 
+            <a href="#source"
                 class="nav-link"
-                
+
                 role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
@@ -157,15 +157,15 @@
                                         <tbody>
                                                 <tr>
                                                         <td>http</td>
-                                                  
+
                                                         <td>
                                                                     <code>HttpClient</code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             No
                                                     </td>
-                                                    
+
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -177,7 +177,7 @@
 </section>
 
             <section data-compodoc="block-methods">
-    
+
     <h3 id="methods">
         Methods
     </h3>
@@ -214,7 +214,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
-                        
+
                         <table class="params">
                             <thead>
                                 <tr>
@@ -246,7 +246,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -324,7 +324,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
-                        
+
                         <table class="params">
                             <thead>
                                 <tr>
@@ -356,7 +356,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -395,7 +395,7 @@
 
                     <div class="io-description">
                         <b>Parameters :</b>
-                        
+
                         <table class="params">
                             <thead>
                                 <tr>
@@ -427,7 +427,7 @@
 
                     </div>
                     <div class="io-description">
-                        
+
                     </div>
                 </td>
             </tr>
@@ -435,7 +435,7 @@
     </table>
 </section>
             <section data-compodoc="block-properties">
-    
+
     <h3 id="inputs">
         Properties
     </h3>
@@ -459,7 +459,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>&#x27;http://localhost:8082/stock&#x27;</code>
+                        <i>Default value : </i><code>&#x27;http://localhost:8089/stock&#x27;</code>
                     </td>
                 </tr>
                     <tr>
@@ -484,14 +484,14 @@ import { Observable } from &#x27;rxjs&#x27;;
   providedIn: &#x27;root&#x27;
 })
 export class StockService {
-  private apiUrl &#x3D; &#x27;http://localhost:8082/stock&#x27;; 
+  private apiUrl &#x3D; &#x27;http://localhost:8089/stock&#x27;;
 
   constructor(private http: HttpClient) { }
 
   public fetchAllData(): Observable&lt;any&gt; {
        return this.http.get(&#x60;${this.apiUrl}&#x60;);
   }
-  
+
   public fetchData(id : any): Observable&lt;any&gt; {
     return this.http.get(&#x60;${this.apiUrl}/${id}&#x60;);
   }
@@ -501,7 +501,7 @@ export class StockService {
   }
 
   public addStock(stock: any): Observable&lt;any&gt; {
-    
+
     return this.http.post(&#x60;${this.apiUrl}&#x60;, stock);
   }
 
