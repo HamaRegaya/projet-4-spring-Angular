@@ -13,7 +13,7 @@ services:
   app-devops:
     depends_on:
       - mysqldb
-    image: yahyasmt/DevOps_Project:1.0.0
+    image: yahyasamet/DevOps_Project:latest
     #build : ./
     restart: on-failure
     ports:
