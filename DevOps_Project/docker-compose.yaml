@@ -13,7 +13,7 @@ services:
   app-Devops:
     depends_on:
       - mysqldb
-    image: imgyahya/devops:1.0
+    image: imgyahya/devops:latest
     # build: ./  # Uncomment if you are building the app locally
     restart: on-failure
     ports:
