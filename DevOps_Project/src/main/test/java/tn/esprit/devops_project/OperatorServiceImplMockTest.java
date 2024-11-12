@@ -28,12 +28,12 @@ class OperatorServiceImplTest {
     OperatorServiceImpl operatorService;
 
     Operator operator = new Operator("John", "Doe", "password123");
-    List<Operator> operatorList = new ArrayList<>() {
-        {
-            add(new Operator("Jane", "Doe", "password123"));
-            add(new Operator("Alice", "Smith", "password456"));
-        }
-    };
+    List<Operator> operatorList = new ArrayList<>();
+
+    public OperatorServiceImplTest() {
+        operatorList.add(new Operator("Jane", "Doe", "password123"));
+        operatorList.add(new Operator("Alice", "Smith", "password456"));
+    }
 
     @Test
     @Order(1)

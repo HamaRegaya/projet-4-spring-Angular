@@ -31,7 +31,7 @@ public class Operator implements Serializable{
 	String password;
 	@OneToMany
 	@JsonIgnore
-	Set<Invoice> invoices;
+	private Set<Invoice> invoices;
 
 	public Operator(String fname, String lname, String password) {
 		this.fname = fname;
