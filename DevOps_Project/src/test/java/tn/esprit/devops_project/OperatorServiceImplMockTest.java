@@ -75,7 +75,7 @@ class OperatorServiceImplTest {
     void testDeleteOperator() {
         Long idToDelete = 1L;
         Mockito.doAnswer(invocation -> {
-            operatorList.removeIf(operator -> operator.getId().equals(idToDelete));
+            operatorList.removeIf(operator -> operator.getIdOperateur().equals(idToDelete));
             return null;
         }).when(operatorRepository).deleteById(idToDelete);
 
@@ -83,7 +83,6 @@ class OperatorServiceImplTest {
 
         Assertions.assertEquals(2, operatorList.size());
     }
-
 
     @Test
     @Order(5)
