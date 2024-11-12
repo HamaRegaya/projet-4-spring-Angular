@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
 import tn.esprit.devops_project.entities.Operator;
 import tn.esprit.devops_project.repositories.OperatorRepository;
 import tn.esprit.devops_project.services.OperatorServiceImpl;
@@ -31,7 +31,6 @@ public class OperatorServiceImplTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         operator = new Operator("John", "Doe", "password123");
         operatorList = new ArrayList<>();
         operatorList.add(new Operator("Jane", "Doe", "password123"));
