@@ -1,31 +1,34 @@
+version: '3.8'
+
 services:
   mysqldb:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=mydb  # Changed from root to mydb for clarity
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb  # Ensure this matches the database used in the app
     ports:
-      - 3306:3306  # Change this to 3307:3306 if 3306 is already in use on your host machine
+      - "3306:3306"  # Change to "3307:3306" if 3306 is in use on the host
     volumes:
       - db:/var/lib/mysql
 
-  app-Devops:
+  app-devops:
     depends_on:
       - mysqldb
     image: imgmohamed/devops:latest
-    # build: ./  # Uncomment if you are building the app locally
+    # Uncomment the following if you need to build the image locally
+    # build: .
     restart: on-failure
     ports:
-      - 8082:8082  # Use a different host port if 8082 is occupied
-
+      - "8082:8082"  # Adjust host port if needed to avoid conflicts
     environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/mydb?createDatabaseIfNotExist=true",  # Use mydb to match the MYSQL_DATABASE
-        "spring.datasource.username" : "root",
-        "spring.datasource.password" : "root",
-        "spring.jpa.hibernate.ddl-auto" : "update"
-      }'
+      SPRING_APPLICATION_JSON: >
+        {
+          "spring.datasource.url": "jdbc:mysql://mysqldb:3306/mydb?createDatabaseIfNotExist=true",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "root",
+          "spring.jpa.hibernate.ddl-auto": "update"
+        }
     stdin_open: true
     tty: true
 
