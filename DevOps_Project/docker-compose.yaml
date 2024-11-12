@@ -28,7 +28,7 @@ services:
           "spring.datasource.password": "root",
           "spring.jpa.hibernate.ddl-auto": "update",
           "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
-          "server.servlet.context.path": "/Projet_Devops",
+          "server.servlet.context.path": "/devops_project",
           "server.port": "8089",
           "management.endpoint.prometheus.enabled": "true",
           "management.endpoints.web.exposure.include": "prometheus"
