@@ -16,11 +16,8 @@ services:
     depends_on:
       - mysqldb
     image: imgmohamed/devops:latest
-    # Uncomment the following if you need to build the image locally
-    # build: .
+    network_mode: host
     restart: on-failure
-    ports:
-      - "8082:8082"  # Adjust host port if needed to avoid conflicts
     environment:
       SPRING_APPLICATION_JSON: >
         {
@@ -29,7 +26,7 @@ services:
           "spring.datasource.password": "root",
           "spring.jpa.hibernate.ddl-auto": "update",
           "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
-          "server.servlet.context.path": "/devops_project",
+          "server.servlet.context-path": "/devops_project",
           "server.port": "8082",
           "management.endpoint.prometheus.enabled": "true",
           "management.endpoints.web.exposure.include": "prometheus"
