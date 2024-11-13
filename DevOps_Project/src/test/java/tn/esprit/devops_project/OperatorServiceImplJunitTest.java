@@ -70,8 +70,7 @@ class OperatorServiceImplIntegrationTest {
         Operator savedOperator = operatorService.addOperator(operator);
         operatorService.deleteOperator(savedOperator.getIdOperateur());
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            operatorService.retrieveOperator(savedOperator.getIdOperateur());
-        });
+        Long operatorId = savedOperator.getIdOperateur();
+        Assertions.assertThrows(RuntimeException.class, () -> operatorService.retrieveOperator(operatorId));
     }
 }
