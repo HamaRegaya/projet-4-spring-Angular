@@ -459,7 +459,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>&#x27;http://localhost:8089/stock&#x27;</code>
+                        <i>Default value : </i><code>&#x27;http://192.168.50.4:8089/stock&#x27;</code>
                     </td>
                 </tr>
                     <tr>
@@ -484,7 +484,7 @@ import { Observable } from &#x27;rxjs&#x27;;
   providedIn: &#x27;root&#x27;
 })
 export class StockService {
-  private apiUrl &#x3D; &#x27;http://localhost:8089/stock&#x27;;
+  private apiUrl &#x3D; &#x27;http://192.168.50.4:8089/stock&#x27;;
 
   constructor(private http: HttpClient) { }
 
