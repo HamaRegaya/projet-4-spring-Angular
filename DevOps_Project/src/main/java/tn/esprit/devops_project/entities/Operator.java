@@ -31,12 +31,11 @@ public class Operator implements Serializable{
 	String password;
 	@OneToMany
 	@JsonIgnore
-	private Set<Invoice> invoices;
+	Set<Invoice> invoices;
 
-	public Operator(String fname, String lname, String password) {
-		this.fname = fname;
-		this.lname = lname;
-		this.password = password;
-	}
-	
+    public Operator(String fname, String lname, String password) {
+        this.fname = fname;
+        this.lname = lname;
+        this.password = password;
+    }
 }
