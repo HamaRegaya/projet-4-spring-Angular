@@ -4,7 +4,7 @@ info:
   description: Summer_Workshop
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8082
+  - url: 'http://192.168.50.4:8082/devops_project
 '
 paths:
   /product:

@@ -34,5 +34,13 @@ services:
     stdin_open: true
     tty: true
 
+  front-angular:
+      depends_on:
+      - app-Devops 
+      image: imgmohamedfront/devops:latest
+      ports:
+          - "80:80"
+      restart: unless-stopped
+
 volumes:
   db:

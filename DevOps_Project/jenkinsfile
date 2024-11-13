@@ -78,12 +78,22 @@ pipeline {
                 
             }
         }
-        stage('Docker Image Building') {
+        stage('Docker Image Building Back') {
             steps {
                 echo 'Building Docker Image '
                 sh '''
                 cd DevOps_Project
                 docker build -t imgmohamed/devops:latest .
+                '''
+                
+            }
+        }
+        stage('Docker Image Building Front') {
+            steps {
+                echo 'Building Docker Image '
+                sh '''
+                cd DevOps_Project_Front
+                docker build -t imgmohamedfront/devops:latest .
                 '''
                 
             }
