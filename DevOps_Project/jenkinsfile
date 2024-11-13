@@ -83,7 +83,7 @@ pipeline {
                 
             }
         }
-        stage('Docker Image Building') {
+        stage('Docker Image Building Back') {
             steps {
                 echo 'Building Docker Image '
                 sh '''
@@ -98,6 +98,22 @@ pipeline {
                 '''
             }
         }
+        stage('Docker Image Building Front') {
+            steps {
+                echo 'Building Docker Image '
+                sh '''
+                cd DevOps_Project_Front
+                # Build the new latest image
+                docker rmi -f imgyahyafront/devops:latest || true
+                docker build -t imgyahyafront/devops:latest .
+                # Remove any dangling images
+                docker image prune -f
+                
+               
+                '''
+            }
+        }
+        
         
         
         stage('Docker Compose') {
@@ -146,8 +162,8 @@ pipeline {
                     """
             }
         }
-
-
+        
+        
     
 }
 }
