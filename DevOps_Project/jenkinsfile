@@ -1,0 +1,140 @@
+pipeline {
+    agent any
+    environment {
+            GITHUB_TOKEN = credentials('GITHUB_TOKEN')
+            LOGIN_SONAR_QUBE = credentials('LOGIN_SONAR_QUBE')
+            PASSWORD_SONAR_QUBE = credentials('PASSWORD_SONAR_QUBE')
+            DOCKER_HUB_PWD = credentials('DOCKER_HUB_PWD')
+            
+        }
+    stages {
+        stage('Checkout GIT') {
+            steps {
+                echo 'Pulling code from the branch...'
+                git branch: 'Mohamed',
+                    url: 'https://${GITHUB_TOKEN}@github.com/HamaRegaya/projet-4-spring-Angular.git'
+            }
+        }
+        stage('Build with Maven') {
+            steps {
+                echo 'Building with Maven...'
+                sh '''
+                cd DevOps_Project
+                mvn clean compile 
+                ''' // Use 'bat' instead of 'sh' if running on Windows
+            }
+        }
+        
+        stage('test with JUnit') {
+            steps {
+                echo 'test with JUnit...'
+                sh '''
+                cd DevOps_Project
+                mvn test 
+                ''' // Use 'bat' instead of 'sh' if running on Windows
+            }
+        }
+        
+        stage('Generate JaCoCo Report') {
+            steps {
+                sh '''
+                cd DevOps_Project
+                mvn jacoco:report
+                '''
+            }
+        }
+
+        stage('JaCoCo coverage report') {
+                    steps {
+                        step([$class: 'JacocoPublisher',
+                              execPattern: '**/target/jacoco.exec',
+                              classPattern: '**/classes',
+                              sourcePattern: '**/src',
+                              exclusionPattern: '/target/**/,**/*Test,**/*_javassist/**'
+                        ])  // Publie le rapport JaCoCo dans Jenkins
+                    }
+                }
+
+        stage('SONARQUBE') {
+            steps {
+                echo 'Test Sonarqube'
+                sh '''
+                cd DevOps_Project
+                mvn sonar:sonar -Dsonar.login=${LOGIN_SONAR_QUBE} -Dsonar.password=${PASSWORD_SONAR_QUBE} -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                '''
+            }
+        }
+        
+        
+        
+        stage('NEXUS') {
+            steps {
+                echo 'Maven Deploy'
+                sh '''
+                cd DevOps_Project
+                mvn deploy -DskipTests
+                '''
+                
+            }
+        }
+        stage('Docker Image Building') {
+            steps {
+                echo 'Building Docker Image '
+                sh '''
+                cd DevOps_Project
+                docker build -t imgmohamed/devops:latest .
+                '''
+                
+            }
+        }
+        stage('Docker Compose') {
+            steps {
+                echo 'Starting Docker Compose'
+                sh '''
+                cd DevOps_Project
+                docker compose up -d
+                '''
+            }
+        }
+        stage('Docker login & push') {
+            steps {
+                echo 'Logging in and pushing the Docker image'
+                withCredentials([string(credentialsId: 'DOCKER_HUB_PWD', variable: 'DOCKER_HUB_PWD')]) {
+                    sh '''
+                    echo "${DOCKER_HUB_PWD}" | docker login -u hamaregaya --password-stdin
+                    cd DevOps_Project
+                    docker tag imgmohamed/devops:latest hamaregaya/devops:tagname  # Tag the image with the new tag
+                    docker push hamaregaya/devops:tagname  # Push the tagged image to Docker Hub
+                    '''
+                }
+            }
+        }
+        
+        stage('Setup Prometheus & Grafana') {
+            steps {
+                            
+                sh 'docker restart prometheus'
+                sh 'docker restart grafana'
+            }
+         }
+         
+        stage('Mail Notification') {
+            steps {
+                echo 'Sending email notification...'
+                mail to: 'regaya.mohamed@esprit.tn',
+                     subject: "The pipeline '${env.JOB_NAME} [${env.BUILD_NUMBER}]' finished",
+                     body: """
+                    Pipeline details:
+                    Job Name: ${env.JOB_NAME}
+                    Number of Builds: ${env.BUILD_NUMBER}
+                    Build Status: ${currentBuild.currentResult}
+                    View the build URL : ${env.BUILD_URL}
+                    """
+            }
+        }
+
+       
+    }
+     
+
+}
