@@ -30,7 +30,7 @@ pipeline {
                 echo 'test with JUnit...'
                 sh '''
                 cd DevOps_Project
-                mvn test 
+                mvn  test 
                 ''' // Use 'bat' instead of 'sh' if running on Windows
             }
         }
