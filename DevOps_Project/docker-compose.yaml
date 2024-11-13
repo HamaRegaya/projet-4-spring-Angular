@@ -1,31 +1,40 @@
-version: "2.29.7"
 services:
   mysqldb:
     image: mysql:8.0
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=devops
+      - MYSQL_DATABASE=mydb  # Correctly set the database name to match your application's needs
     ports:
-      - 3306:3306
+      - "3306:3306"  # If port 3306 is in use on your host, change this to "3307:3306"
     volumes:
       - db:/var/lib/mysql
-  app-devops:
+
+  app-Devops:
     depends_on:
       - mysqldb
-    image: yahyasmt/DevOps_Project:1.0.0
-    #build : ./
+    image: imgyahya/devops:latest
+    # Uncomment the next line if you need to build the app locally
+    # build: ./
     restart: on-failure
     ports:
-      - 8082:8082
+      - "8089:8089"  # Use a different host port if 8089 is already occupied
+
     environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://localhost:3306/devops?createDatabaseIfNotExist=true",
-        "spring.datasource.username" : "root",
-        "spring.datasource.password" : "root",
-        "spring.jpa.hibernate.ddl-auto" : "update"
-      }'
+      SPRING_APPLICATION_JSON: >-
+        {
+          "spring.datasource.url": "jdbc:mysql://192.168.50.4:3306/mydb?createDatabaseIfNotExist=true",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "root",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL8Dialect",
+          "server.servlet.context.path": "/devops_project",
+          "server.port": "8089",
+          "management.endpoint.prometheus.enabled": "true",
+          "management.endpoints.web.exposure.include": "prometheus"
+        }
     stdin_open: true
     tty: true
+
 volumes:
-  db :
+  db:
