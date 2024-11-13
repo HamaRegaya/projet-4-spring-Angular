@@ -1,96 +1,77 @@
 package tn.esprit.devops_project;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.devops_project.entities.Operator;
 import tn.esprit.devops_project.repositories.OperatorRepository;
 import tn.esprit.devops_project.services.OperatorServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-@TestMethodOrder(OrderAnnotation.class)
-@ExtendWith(MockitoExtension.class)
-class OperatorServiceImplTest {
+@SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class OperatorServiceImplIntegrationTest {
 
-    @Mock
-    OperatorRepository operatorRepository;
-
-    @InjectMocks
+    @Autowired
     OperatorServiceImpl operatorService;
 
-    Operator operator = new Operator("John", "Doe", "password123");
-    List<Operator> operatorList = new ArrayList<>();
+    @Autowired
+    OperatorRepository operatorRepository;
 
-    public OperatorServiceImplTest() {
-        operatorList.add(new Operator("Jane", "Doe", "password123"));
-        operatorList.add(new Operator("Alice", "Smith", "password456"));
+    Operator operator = new Operator("John", "Doe", "password123");
+
+    @BeforeEach
+    void setUp() {
+        operatorRepository.deleteAll(); // Clean the database before each test
     }
 
     @Test
     @Order(1)
+    void testAddOperator() {
+        Operator savedOperator = operatorService.addOperator(operator);
+        Assertions.assertNotNull(savedOperator);
+        Assertions.assertNotNull(savedOperator.getIdOperateur());
+        Assertions.assertEquals("John", savedOperator.getFname());
+    }
+
+    @Test
+    @Order(2)
     void testRetrieveOperator() {
-        Mockito.when(operatorRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(operator));
-        Operator retrievedOperator = operatorService.retrieveOperator(1L);
+        Operator savedOperator = operatorService.addOperator(operator);
+        Operator retrievedOperator = operatorService.retrieveOperator(savedOperator.getIdOperateur());
         Assertions.assertNotNull(retrievedOperator);
         Assertions.assertEquals("John", retrievedOperator.getFname());
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void testRetrieveAllOperators() {
-        Mockito.when(operatorRepository.findAll()).thenReturn(operatorList);
+        operatorService.addOperator(new Operator("Jane", "Doe", "password123"));
+        operatorService.addOperator(new Operator("Alice", "Smith", "password456"));
+
         List<Operator> allOperators = operatorService.retrieveAllOperators();
         Assertions.assertEquals(2, allOperators.size());
     }
 
     @Test
-    @Order(3)
-    void testAddOperator() {
-        Operator newOperator = new Operator("Bob", "Johnson", "password789");
-
-        Mockito.when(operatorRepository.save(Mockito.any(Operator.class)))
-                .thenAnswer(invocation -> {
-                    Operator savedOperator = invocation.getArgument(0);
-                    operatorList.add(savedOperator);
-                    return savedOperator;
-                });
-
-        operatorService.addOperator(newOperator);
-
-        Assertions.assertEquals(3, operatorList.size());
-        Assertions.assertEquals("Bob", operatorList.get(2).getFname());
-    }
-
-    @Test
     @Order(4)
-    void testDeleteOperator() {
-        Long idToDelete = 1L;
-        Mockito.doAnswer(invocation -> {
-            operatorList.remove(0);
-            return null;
-        }).when(operatorRepository).deleteById(idToDelete);
+    void testUpdateOperator() {
+        Operator savedOperator = operatorService.addOperator(operator);
+        savedOperator.setPassword("newpassword");
+        Operator updatedOperator = operatorService.updateOperator(savedOperator);
 
-        operatorService.deleteOperator(idToDelete);
-
-        Assertions.assertEquals(2, operatorList.size());
+        Assertions.assertEquals("newpassword", updatedOperator.getPassword());
     }
 
     @Test
     @Order(5)
-    void testUpdateOperator() {
-        Operator updatedOperator = new Operator("John", "Doe", "newpassword");
+    void testDeleteOperator() {
+        Operator savedOperator = operatorService.addOperator(operator);
+        operatorService.deleteOperator(savedOperator.getIdOperateur());
 
-        Mockito.when(operatorRepository.save(Mockito.any(Operator.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        Operator result = operatorService.updateOperator(updatedOperator);
-
-        Assertions.assertEquals("newpassword", result.getPassword());
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            operatorService.retrieveOperator(savedOperator.getIdOperateur());
+        });
     }
 }
