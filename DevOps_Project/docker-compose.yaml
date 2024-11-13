@@ -35,6 +35,12 @@ services:
         }
     stdin_open: true
     tty: true
+  front-angular:
+    build:
+      context: ../DevOps_Project_Front
+    ports:
+        - "80:80"
+    restart: unless-stopped
 
 volumes:
   db:
