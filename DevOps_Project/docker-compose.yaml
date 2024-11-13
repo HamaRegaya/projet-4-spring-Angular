@@ -36,6 +36,8 @@ services:
     stdin_open: true
     tty: true
   front-angular:
+    depends_on:
+     - app-Devops 
     image: imgyahyafront/devops:latest
     ports:
         - "80:80"
