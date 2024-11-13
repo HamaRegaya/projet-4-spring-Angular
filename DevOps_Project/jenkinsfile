@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout GIT') {
             steps {
                 echo 'Pulling code from the branch...'
-                git branch: 'yahya',
+                git branch: 'Mohamed',
                     url: 'https://${GITHUB_TOKEN}@github.com/HamaRegaya/projet-4-spring-Angular.git'
             }
         }
